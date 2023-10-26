@@ -1,0 +1,62 @@
+
+* {
+    font-family: Hack, sans-serif;
+    font-size: 12px;
+    min-height: 0;
+}
+
+window#waybar {
+    background: rgba(45, 53, 59, 0.8);
+    /* border: 2px solid rgba(61, 72, 77, 0.9); */
+    color: #ffffff;
+}
+
+#window, #clock, #system, #keyboard, #hardware {
+    margin: 5px;
+    padding: 0 10px;
+    background-color: #272E33;
+   /* border: 1px solid #3D484D;*/
+    border-radius: 15px;
+}
+
+#window, #clock {
+    background-color: #272e33;
+   /* border: 1px solid #2D353B;*/
+    color: #ffffff;
+    
+}
+
+#workspaces {
+    margin-right: 10px;
+    color: #ffffff;
+}
+
+#workspaces button {
+    border: none;
+    border-radius: 0;
+    color: #ffffff;
+    transition: all 0.3s ease-in-out;
+}
+
+#workspaces button.active {
+    background-color: #272e33;
+    color: #ffffff;
+    transition: all 0.3s ease-in-out;
+}
+
+#workspaces button.focused {
+    background-color: #272e33;
+}
+
+#workspaces button:hover {
+    box-shadow: inherit;
+    text-shadow: inherit;
+    background: #3D484D;
+    border: none;
+    color: #D3C6AA;
+}
+
+#keyboard-state {
+    margin-right: 7px;
+}
+

@@ -1,0 +1,40 @@
+{
+    "layer": "top",
+    "height": 35,
+    "position": "bottom",    
+
+    // Load modules
+    "include": ["~/.config/waybar/modules.json"],
+
+    "modules-left": ["wlr/workspaces", "hyprland/window"],
+    "modules-center": ["clock"],
+    "modules-right": ["group/system", "group/hardware"],
+
+    "group/system": {
+        "orientation": "horizontal",
+        "modules": [
+            "backlight",
+            "pulseaudio",
+            "tray",
+            "network",
+            "battery"
+        ]
+    },
+
+    "group/keyboard": {
+        "orientation": "horizontal",
+        "modules": [
+            "hyprland/language",
+            "keyboard-state"
+        ]
+    },
+
+    "group/hardware": {
+        "orientation": "horizontal",
+        "modules": [
+            "disk",
+            "cpu",
+            "memory"
+        ]
+    }
+}

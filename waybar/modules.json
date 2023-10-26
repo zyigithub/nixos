@@ -1,0 +1,112 @@
+{
+    "wlr/workspaces": {
+        "format": "{icon}",
+        "format-icons": {
+            "1": "I",
+            "2": "II",
+            "3": "III",
+            "4": "IV",
+            "5": "V",
+            "6": "VI",
+            "7": "VII",
+            "8": "VIII",
+            "9": "IX",
+            "10": "X"
+        },
+        "on-click": "activate",
+        "sort-by-number": true,
+        "active-only": true
+    },
+    "hyprland/window": {
+        "max-length": 25
+    },
+    "clock": {
+        "format-alt": "{:%a, %d. %b  %H:%M}"
+    },
+    "backlight": {
+        "device": "intel_backlight",
+        "format": "<span foreground=\"#ffffff\">{icon}</span> {percent}% ",
+        "format-icons": [
+            "",
+            ""
+        ],
+        "on-click": "pkill -USR1 gammastep || gammastep",
+        "tooltip-format": "Brightness"
+    },
+    "pulseaudio": {
+        "format": "<span foreground=\"#3D484D\">|</span> <span foreground=\"#ffffff\">{icon}</span> {volume}% <span foreground=\"#3D484D\">|</span> ",
+        "format-bluetooth": "<span foreground=\"#ffffff\">{icon}</span> {volume}%",
+        "format-muted": "<span foreground=\"#ffffff\"></span>",
+        "format-icons": {
+            "headphone": "",
+            "default": [
+                "",
+                ""
+            ]
+        },
+        "scroll-step": 1,
+        "on-click": "pavucontrol",
+        "ignored-sinks": [
+            "Easy Effects Sink"
+        ]
+    },
+    "network": {
+        // "interface": "wlp2*", // (Optional) To force the use of this interface
+        "format-wifi": "{essid} ",
+        "format-ethernet": "{ipaddr}/{cidr} ",
+        "tooltip-format": "{ifname} via {gwaddr} ",
+        "format-linked": "{ifname} (No IP) ",
+        "format-disconnected": "Disconnected ⚠",
+        "format-alt": "{ifname}: {ipaddr}/{cidr}"
+    },
+    "hyprland/language": {
+        "format": "<span foreground=\"#A7C080\">󰌌</span> {} ",
+        "format-de": "ch",
+        "format-en": "us",
+        "format-ar": "ar"
+    },
+    "keyboard-state": {
+        "capslock": true,
+        "format": {
+            "capslock": "<span foreground=\"#3D484D\">|</span> <span foreground=\"#A7C080\">󰪛</span> {icon}"
+        },
+        "format-icons": {
+            "locked": "",
+            "unlocked": ""
+        }
+    },
+    "disk": {
+        "interval": 30,
+        "format": "<span foreground=\"#ffffff\" weight=\"bold\">/</span> {percentage_used}% ",
+        "path": "/"
+    },
+    "cpu": {
+        "format": "<span foreground=\"#3D484D\">|</span> <span foreground=\"#ffffff\">CPU</span> {usage}% "
+    },
+    "memory": {
+        "format": "<span foreground=\"#3D484D\">|</span> <span foreground=\"#ffffff\" >RAM</span> {}% "
+    },
+    "custom/wlogout": {
+        "format": "⏻",
+        "on-click": "wlogout",
+        "tooltip": false
+    },
+    "battery": {
+        "states": {
+            // "good": 95,
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "<span foreground=\"#3D484D\">|</span> <span foreground=\"#ffffff\">BAT</span> {capacity}%",
+        "format-charging": "<span foreground=\"#3D484D\">|</span>  {capacity}%",
+        "format-plugged": "{capacity}% ",
+        "format-alt": "{time} {icon}",
+        // "format-good": "", // An empty format will hide the module
+        // "format-full": "",
+        "format-icons": ["", "", "", "", ""]
+    },
+    "tray": {
+        // "icon-size": 21,
+        "spacing": 10
+    },
+}

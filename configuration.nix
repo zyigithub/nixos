@@ -1,23 +1,52 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-
-{ config, pkgs, ... }:
-
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+  config,
+  pkgs,
+
+  ...
+}:
+{
+  imports = [
+    # Include the results of the hardware scan.
+
+    ./hardware-configuration.nix
+  ];
 
   # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  
+  boot.loader = {
+    efi.canTouchEfiVariables = true;
+    grub = {
+      enable = true;
+      devices = [ "nodev" ];
+      efiSupport = true;
+      useOSProber = true;
+    };
+  };
 
-  nixpkgs.config.allowUnfree = true;
+  #flakes
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
-  networking.hostName = "torvalds"; # Define your hostname.
+
+  programs.hyprland.enable = true;
+
+  programs.steam = {
+    enable = true;
+    remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+    dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+    localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
+  };
+
+  # networking.firewall = {
+  #   enable = true;
+  #   allowedTCPPorts = [ 80 443 300 ];
+  #  };
+
+  networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -26,6 +55,22 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
+  networking.hosts = {
+    "192.168.122.105" = ["kasm.net"];
+  };
+
+  hardware.opentabletdriver.enable = true;
+
+  # Audio configs
+  hardware.pulseaudio.enable = false;
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+    wireplumber.enable = true;
+  };
 
   # Set your time zone.
   time.timeZone = "Asia/Singapore";
@@ -46,118 +91,82 @@
   };
 
   # Configure keymap in X11
-  services.xserver = {
+  services.xserver.xkb = {
     layout = "us";
-    xkbVariant = "";
+    variant = "";
   };
 
 
-  programs.hyprland = {
+  # Zsh
+  programs.zsh = {
     enable = true;
-    nvidiaPatches = true;
-    xwayland.enable = true;
+    enableCompletion = true;
+    syntaxHighlighting.enable = true;
+
+    shellAliases = let 
+    	editor = "micro";
+    in {
+      ll = "ls -l";
+      nigger = "sudo nixos-rebuild switch";
+      zen = "flatpak run io.github.zen_browser.zen & disown";
+      flake = "nano ~/.config/home-manager/flake.nix";
+      home = "nano ~/.config/home-manager/home.nix";
+      siu = "sudo nixos-rebuild switch --flake ~/nixos/";
+      hypr = "${editor} .config/hypr/hyprland.conf";
+      nigga = "sudo nano /etc/nixos/configuration.nix";
+    };
+
+    ohMyZsh = {
+      enable = true;
+      theme = "geoffgarside";
+    };
   };
 
-  environment.sessionVariables = {
-    WLR_NO_HARDWARE_CURSORS = "1";
-    NIXOS_OZONE_WL = "1";
-    XCURSOR_SIZE = "80";
-  };
 
 
-  hardware = {
-    opengl.enable = true;
-    nvidia.modesetting.enable = true;
-  };
-
-  xdg.portal.enable = true;
-  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-
- 
-  #sound
-  sound.enable = true;
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    jack.enable = true;
-  };
-
+  virtualisation.docker.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.linus = {
+  users.users.zyi = {
     isNormalUser = true;
     description = "zyi";
-    extraGroups = [ "networkmanager" "wheel" "audio" ];
-    packages = with pkgs; [];
+    shell = pkgs.zsh;
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "sound"
+      "audio"
+      "video"
+      "docker"
+    ];
+    packages = with pkgs; [ ];
   };
 
-  #virtualbox
-  virtualisation.virtualbox.host.enable = true;
-  virtualisation.virtualbox.guest.enable = true;
-  virtualisation.virtualbox.host.enableExtensionPack = true;
-  users.extraGroups.vboxusers.members = [ "linus" ];
+  # Allow unfree packages
+  nixpkgs.config.allowUnfree = true;
 
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-
-    kitty
-    gtk3
-    gtk4
-    chromium
-    wofi
-    (pkgs.waybar.overrideAttrs (oldAttrs: {
-    mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
-    })
-    )
-    neofetch
-    swww   #wallpaper engine 
-    pkgs.networkmanagerapplet
-    tlp #power saver
-    vscode.fhs
-#    python38
-    git    
-    gparted   
-    xfce.thunar
-    pavucontrol #audio controller
-    home-manager
-    killall
-    btop #task manager
-    bemenu
-    libreoffice
-#    ciscoPacketTracer8
-    git
-#    python311Packages.distorm3   
+    pulseaudio
+    pipewire
+    pavucontrol
+    os-prober
+    zsh
+    stow
+    vesktop
+    networkmanagerapplet
+    go
+    python313
+    poetry
+    gcc-unwrapped
+    nodejs_22
   ];
 
-  #font packages
-  fonts.fonts = with pkgs; [
-    font-awesome
-    hack-font
+  fonts.packages = with pkgs; [
+    (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
   ];
-  
-
-  #battery 
- 
-  services.power-profiles-daemon.enable = false;
-  
-  services.thermald.enable = true;
-  
-  services.tlp = {
-    enable = true;
- 
-    settings = {
-      CPU_BOOST_ON_AC = 1;
-      CPU_BOOST_ON_BAT = 1;
-      CPU_SCALING_GOVERNOR_ON_AC = "performance";
-      CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
-    };
-  };
-
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -184,6 +193,6 @@
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "23.05"; # Did you read the comment?
-
+  system.stateVersion = "unstable";
+  
 }

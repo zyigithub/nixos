@@ -1,10 +1,20 @@
-{ config, pkgs, ... }:
-
+{
+  config,
+  pkgs,
+  ...
+}:
 {
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
-  home.username = "linus";
-  home.homeDirectory = "/home/linus";
+  home.username = "zyi";
+  home.homeDirectory = "/home/zyi";
+
+  nixpkgs = {
+    config = {
+      allowUnfree = true;
+      allowUnfreePredicate = _: true;
+    };
+  };
 
   # This value determines the Home Manager release that your configuration is
   # compatible with. This helps avoid breakage when a new Home Manager release
@@ -13,40 +23,113 @@
   # You should not change this value, even if you update Home Manager. If you do
   # want to update the value, then make sure to first check the Home Manager
   # release notes.
-  home.stateVersion = "22.11"; # Please read the comment before changing.
+  home.stateVersion = "24.05"; # Please read the comment before changing.
 
-  programs.zsh.enable = true;
-
-  gtk.enable = true;
-
-  gtk.cursorTheme.package = pkgs.apple-cursor;
-  gtk.cursorTheme.name = "Apple-Cursor";
-
-  gtk.theme.package = pkgs.nordic;
-  gtk.theme.name = "Nordic";
-
-  gtk.iconTheme.package = pkgs.papirus-icon-theme;
-  gtk.iconTheme.name = "Papirus-Dark";
   # The home.packages option allows you to install Nix packages into your
   # environment.
-  home.packages = [
-    # # Adds the 'hello' command to your environment. It prints a friendly
-    # # "Hello, world!" when run.
-     pkgs.hello
-     
-    # # It is sometimes useful to fine-tune packages, for example, by applying
-    # # overrides. You can do that directly here, just don't forget the
-    # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
-    # # fonts?
-    # (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
+  home.packages = with pkgs; [
+    #rice stuff
+    neofetch
+    nwg-look
+    swaybg
+    hyprpaper
+    hyprlock
 
-    # # You can also create simple shell scripts directly inside your
-    # # configuration. For example, this adds a command 'my-hello' to your
-    # # environment:
-    # (pkgs.writeShellScriptBin "my-hello" ''
-    #   echo "Hello, ${config.home.username}!"
-    # '')
+    #theme
+    jetbrains-mono
+    palenight-theme
+
+    #misc utils
+    unzip
+    grim
+    obs-studio
+    mpv
+    vlc
+    slurp
+    micro 
+	okular
+	zip
+	btop
+	kitty
+	chromium
+	firefox-bin
+	vscode
+	libsForQt5.kate
+	gnome-solanum
+	errands
+	p7zip
+	
+    anyrun
+	dig
+
+	xfce.thunar
+	xfce.thunar-volman
+
+
+    libreoffice-qt6-fresh
+	abiword
+
+	clamav
+	chkrootkit
+
+	postman
+	nodePackages_latest.ts-node
+	typescript
+
+	#art shit
+	blender 
+	krita
+
+	nexusmods-app
+
+	zoom-us
+	godot_4
+	protonvpn-gui
+	transmission_4
+	qbittorrent
+	
   ];
+
+  gtk = {
+    enable = true;
+
+    theme = {
+      package = pkgs.palenight-theme;
+      name = "palenight";
+    };
+
+    iconTheme = {
+      package = pkgs.adwaita-icon-theme;
+      name = "Adwaita";
+    };
+
+    gtk3 = {
+      extraConfig.gtk-application-prefer-dark-theme = true;
+    };
+
+    font = {
+      name = "Jetbrains-Mono";
+      size = 11;
+    };
+  };
+
+  qt.enable = true;
+  qt.platformTheme.name = "gtk";
+
+  home.pointerCursor = {
+    gtk.enable = true;
+    package = pkgs.bibata-cursors;
+    name = "Bibata-Modern-Classic";
+    size = 16;
+  };
+
+
+  programs.git = {
+    enable = true;
+    userName  = "zyi";
+    userEmail = "zyutan7@gmail.com";
+  };
+
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
@@ -63,16 +146,22 @@
     # '';
   };
 
-  # You can also manage environment variables but you will have to manually
-  # source
+  # Home Manager can also manage your environment variables through
+  # 'home.sessionVariables'. These will be explicitly sourced when using a
+  # shell provided by Home Manager. If you don't want to manage your shell
+  # through Home Manager then you have to manually source 'hm-session-vars.sh'
+  # located at either
   #
   #  ~/.nix-profile/etc/profile.d/hm-session-vars.sh
   #
   # or
   #
-  #  /etc/profiles/per-user/linus/etc/profile.d/hm-session-vars.sh
+  #  ~/.local/state/nix/profiles/profile/etc/profile.d/hm-session-vars.sh
   #
-  # if you don't want to manage your shell through Home Manager.
+  # or
+  #
+  #  /etc/profiles/per-user/zyi/etc/profile.d/hm-session-vars.sh
+  #
   home.sessionVariables = {
     # EDITOR = "emacs";
   };
